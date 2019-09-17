@@ -1,3 +1,7 @@
+# ------------------------------
+# Lídia André - September 2019
+# ------------------------------
+
 install.packages("rjags")
 install.packages("runjags")
 install.packages("coda")

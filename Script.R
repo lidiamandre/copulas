@@ -1,3 +1,7 @@
+# ------------------------------
+# Lídia André - September 2019
+# ------------------------------
+
 install.packages("copula")
 install.packages("VineCopula")
 install.packages("MASS")
