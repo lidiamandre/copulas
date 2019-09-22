@@ -112,41 +112,41 @@ plot(gaussian_a)
 # -----
 
 data<-dados(castelo_w)
-inits1<-list(alpha=2.0,beta=0.5,mu=1.5,sigma=0.3,theta=0.5)
-inits2<-list(alpha=5.0,beta=1.5,mu=2.0,sigma=0.7,theta=0.2)
+inits1<-list(mu1=1.5,sigma1=1.5,mu2=1.5,sigma2=0.3,theta=0.5)
+inits2<-list(mu1=2.0,sigma1=0.7,mu2=2.0,sigma2=0.7,theta=0.2)
 inits<-list(inits1,inits2)
 
 gumbel<-"model{
           for (i  in 1:n){
-            x[i]~dgamma(alpha,beta)
-            y[i]~dlnorm(mu,prec)
+            x[i]~dlnorm(mu1,prec1)
+            y[i]~dlnorm(mu2,prec2)
           }
-          prec<-1/sigma^2
+          prec1<-1/sigma1^2
+          prec2<-1/sigma2^2
           alphac<-1/theta
           C<-10000000
           for(i in 1:n){
             zeros[i]~dpois(phi[i])
-            u[i]<-pgamma(x[i],alpha,beta)
-            v[i]<-plnorm(y[i],mu,prec)
+            u[i]<-plnorm(x[i],mu1,prec1)
+            v[i]<-plnorm(y[i],mu2,prec2)
             a[i]<--log(u[i])
             b[i]<--log(v[i])
             w[i]<-a[i]^(alphac)+b[i]^(alphac)
-            l1[i]<-alpha*log(beta)+(alpha-1)*log(x[i])-beta*x[i]-loggam(alpha)
-            l2[i]<--log(y[i]*sigma*sqrt(2*3.141593))-0.5*((log(y[i])-mu)^2/sigma^2)
+            l1[i]<--log(x[i]*sigma1*sqrt(2*3.141593))-0.5*((log(x[i])-mu1)^2/sigma1^2)
+            l2[i]<--log(y[i]*sigma2*sqrt(2*3.141593))-0.5*((log(y[i])-mu2)^2/sigma2^2)
             l3[i]<--log(u[i]*v[i])+(alphac-1)*log(a[i]*b[i])+log(w[i]^(2*(1/alphac)-2)+(alphac-1)*w[i]^((1/alphac)-2))-w[i]^(1/alphac)
             logL[i]<-l1[i]+l2[i]+l3[i]
             phi[i]<--logL[i]+C
           }
           theta~dbeta(0.5,0.5)
-          alpha~dgamma(0.001,0.001)
-          beta~dgamma(0.001,0.001)
-          mu~dnorm(0.0,0.0001)
-          sigma~dgamma(0.001,0.001)
+          mu1~dnorm(0.0,0.0001)
+          sigma1~dgamma(0.001,0.001)
+          mu2~dnorm(0.0,0.0001)
+          sigma2~dgamma(0.001,0.001)
         }"
-gumbel_w<-autorun.jags(gumbel,monitor=c("alpha","beta","mu","sigma","rho"), data=data,n.chains=2, inits=inits,startsample=4000,thin=30)
+gumbel_w<-autorun.jags(gumbel,monitor=c("mu1","sigma1","mu2","sigma2","alphac"), data=data,n.chains=2, inits=inits,startsample=4000)
 summary(gumbel_w)
 plot(gumbel_w)
-# extract.runjags(gumbel_w,what="dic")
 
 # -----
 
