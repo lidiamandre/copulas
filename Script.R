@@ -1,5 +1,5 @@
 # ------------------------------
-# Lídia André - September 2019
+# Lídia André - January 2020
 # ------------------------------
 
 install.packages("copula")
@@ -1025,6 +1025,7 @@ int_mm<-function(data){
 }
 
 empirical<-function(data,titulo){
+  set.seed(123)
   n<-dim(data)[[1]]
   x<-data$obs
   y<-data$sim
@@ -1087,6 +1088,7 @@ biv<-function(data,fun1,fun2){
 # ===================================
 
 rsb<-function(data,fun1,fun2,titulo1,titulo2){
+  set.seed(123)
   n<-dim(data)[[1]]
   x<-data$obs
   y<-data$sim
@@ -1103,6 +1105,7 @@ rsb<-function(data,fun1,fun2,titulo1,titulo2){
 }
 
 prob<-function(data,fun1,fun2,p){
+  set.seed(123)
   x<-data$obs
   y<-data$sim
   mat<-cbind(x,y)
@@ -1158,6 +1161,7 @@ prob<-function(data,fun1,fun2,p){
 # ================================
 
 rsc<-function(data,titulo1,titulo2){
+  set.seed(123)
   n<-dim(data)[[1]]
   cop<-fitcop(data)
   copr<-rCopula(n,cop)
